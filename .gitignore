@@ -25,6 +25,7 @@ hs_err_pid*
 # Intellij IDEA
 .idea/
 out/
+*.iml
 
 # test files
 input/
