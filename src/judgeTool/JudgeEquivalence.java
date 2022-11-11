@@ -7,12 +7,23 @@ public class JudgeEquivalence {
 
     private final File dir;
     private final File[] files;
+    private final File inFormat;
     private final UFS equivalence;
 
     public JudgeEquivalence(File dir) {
         this.dir = dir;
         this.files = dir.listFiles((File f)-> (getFileExtension(f).equalsIgnoreCase("cpp") 
                                             || getFileExtension(f).equalsIgnoreCase("c")));
+        final String inFormatName = "stdin_format.txt";
+        File[] inFormatList = this.dir.listFiles((File f)-> (f.getName().equals(inFormatName)));
+        
+        if(inFormatList.length > 0) {
+            inFormat = inFormatList[0];
+        }
+        else {
+            inFormat = null;
+        }
+
         if(files.length > 0) {
             this.equivalence = new UFS(this.files.length);
         } 
