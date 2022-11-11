@@ -15,8 +15,8 @@ public class JudgeEquivalence {
         this.files = dir.listFiles((File f)-> (getFileExtension(f).equalsIgnoreCase("cpp") 
                                             || getFileExtension(f).equalsIgnoreCase("c")));
         final String inFormatName = "stdin_format.txt";
-        File[] inFormatList = this.dir.listFiles((File f)-> (f.getName().equals(inFormatName)));
-        
+        File[] inFormatList = this.dir.listFiles((File f)-> (f.getName().equalsIgnoreCase(inFormatName)));
+
         if(inFormatList.length > 0) {
             inFormat = inFormatList[0];
         }
