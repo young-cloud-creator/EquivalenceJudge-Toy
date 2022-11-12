@@ -28,16 +28,21 @@ public class Execute {
     }
 
     void exec(String testcase) throws IOException {
-        Process p = Runtime.getRuntime().exec("echo \""+testcase+"\" | "+excutableFile.getCanonicalPath()+
-                    " >> "+outputFile.getCanonicalPath(), null);
-        Runtime.getRuntime().exec("echo \"\" >> "+outputFile.getCanonicalPath());
-        try {
-            if(p.waitFor() != 0) {
-                Runtime.getRuntime().exec("echo \"Nonzero Error\" >> "+outputFile.getCanonicalPath());
-            }
+        if(excutableFile == null) {
+            Runtime.getRuntime().exec("echo \"can't compile\" >> "+outputFile.getCanonicalPath());
         }
-        catch(InterruptedException e) {
-            Runtime.getRuntime().exec("echo \"InterruptedException\" >> "+outputFile.getCanonicalPath());
+        else {
+            Process p = Runtime.getRuntime().exec("echo \""+testcase+"\" | "+excutableFile.getCanonicalPath()+
+                        " >> "+outputFile.getCanonicalPath(), null);
+            Runtime.getRuntime().exec("echo \"\" >> "+outputFile.getCanonicalPath());
+            try {
+                if(p.waitFor() != 0) {
+                    Runtime.getRuntime().exec("echo \"Nonzero Error\" >> "+outputFile.getCanonicalPath());
+                }
+            }
+            catch(InterruptedException e) {
+                Runtime.getRuntime().exec("echo \"InterruptedException\" >> "+outputFile.getCanonicalPath());
+            }
         }
     }
 
