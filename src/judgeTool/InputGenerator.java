@@ -3,6 +3,7 @@ package judgeTool;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,13 +24,33 @@ public class InputGenerator {
         if(!knowInputTypes) {
             getInputTypes();
         }
+        Random r = new Random();
+        int exp;
         for(InType inType : inputTypes) {
             switch(inType.getInType()) {
                 case INT:
+                    exp = r.nextInt(inType.getUp()-inType.getLow()+1);
+                    exp += inType.getLow();
+                    inputString += Integer.toString(exp)+" ";
                     break;
                 case CHAR:
+                    exp = r.nextInt(26);
+                    boolean isUpperCase = r.nextBoolean();
+                    if(isUpperCase) {
+                        inputString += (char)('A'+exp)+" ";
+                    }
+                    else {
+                        inputString += (char)('a'+exp)+" ";
+                    }
                     break;
                 case STRING:
+                    String allChar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    exp = r.nextInt(inType.getUp()-inType.getLow()+1);
+                    exp += inType.getLow();
+                    for(int i=0; i<exp; i++) {
+                        inputString += allChar.charAt(r.nextInt(allChar.length()));
+                    }
+                    inputString += " ";
                     break;
             }
         }
