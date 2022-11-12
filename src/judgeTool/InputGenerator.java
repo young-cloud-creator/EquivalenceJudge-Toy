@@ -81,21 +81,33 @@ public class InputGenerator {
         String intContent = "int\\((\\+|-)?[0-9]+,(\\+|-)?[0-9]+\\)";
         String charContent = "char";
         String stringContent = "string\\((\\+)?[0-9]+,(\\+)?[0-9]+\\)";
-        String rangeContent = "(\\D*)((\\+|-)?[0-9]+)(,)((\\+|-)?[0-9]+)(\\D*)";
+        String rangeContent = "([^\\+-0-9]*)((\\+|-)?[0-9]+)(,)((\\+|-)?[0-9]+)(\\D*)";
         Pattern rangePattern = Pattern.compile(rangeContent);
         Matcher rangeMatcher = rangePattern.matcher(exp);
         rangeMatcher.find();
 
         if(Pattern.matches(intContent, exp)) {
-            return new InType(Types.INT, Integer.parseInt(rangeMatcher.group(2)), 
-                                        Integer.parseInt(rangeMatcher.group(5)));
+            int low = Integer.parseInt(rangeMatcher.group(2));
+            int up = Integer.parseInt(rangeMatcher.group(5));
+            if(low > up) {
+                return null;
+            }
+            else {  
+                return new InType(Types.INT, low, up);
+            }
         }
         else if(Pattern.matches(charContent, exp)) {
             return new InType(Types.CHAR, 0, 0);
         }
         else if(Pattern.matches(stringContent, exp)) {
-            return new InType(Types.STRING, Integer.parseInt(rangeMatcher.group(2)), 
-                                        Integer.parseInt(rangeMatcher.group(5)));
+            int low = Integer.parseInt(rangeMatcher.group(2));
+            int up = Integer.parseInt(rangeMatcher.group(5));
+            if(low > up) {
+                return null;
+            }
+            else {
+                return new InType(Types.STRING, low, up);
+            }
         }
         else {
             return null;
