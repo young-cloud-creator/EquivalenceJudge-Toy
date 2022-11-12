@@ -28,12 +28,13 @@ public class Controller {
         for(File subDir : subDirs) {
             JudgeEquivalence judge = new JudgeEquivalence(subDir);
             judge.judge();
-            UFS result = judge.getJudgeResult();
-            processResult(result);
+            UFS resultUFS = judge.getJudgeResult();
+            File[] resultFiles = judge.getFiles();
+            processResult(resultUFS, resultFiles);
         }
     }
 
-    private void processResult(UFS equivalence) {
+    private void processResult(UFS equivalence, File[] files) {
         // TODO: process the UFS and write file pairs to .csv files
         // TODO: convert UFS to String[][] so that it can be output by MainUI
     }
