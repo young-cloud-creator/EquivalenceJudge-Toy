@@ -23,6 +23,7 @@ public class InputGenerator {
         String inputString = "";
         if(!knowInputTypes) {
             getInputTypes();
+            knowInputTypes = true;
         }
         Random r = new Random();
         int exp;
@@ -58,7 +59,6 @@ public class InputGenerator {
     }
 
     private void getInputTypes() {
-        this.knowInputTypes = true;
         if(this.inFormat == null) {
             return;
         }
