@@ -41,6 +41,10 @@ public class JudgeEquivalence {
         return this.equivalence;
     }
 
+    public File[] getFiles() {
+        return this.files;
+    }
+
     private String getFileExtension(File f) {
         String extension = new String();
         int idx = f.getName().lastIndexOf(".");
