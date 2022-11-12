@@ -34,7 +34,12 @@ public class JudgeEquivalence {
 
     public void judge() {
         // judge the equivalence of every file pairs, files are list in this.files
+        final int testcasesNum = 10;
         InputGenerator inputGenerator = new InputGenerator(this.inFormat);
+        String[] testcases = new String[testcasesNum];
+        for(int i=0; i<testcasesNum; i++) {
+            testcases[i] = inputGenerator.genInput();
+        }
     }
 
     public UFS getJudgeResult() {
