@@ -1,6 +1,8 @@
 package judgeTool;
 
 import java.io.File;
+import java.io.IOException;
+
 import dataStructure.UFS;
 
 public class JudgeEquivalence {
@@ -32,13 +34,19 @@ public class JudgeEquivalence {
         }
     }
 
-    public void judge() {
+    public void judge() throws IOException {
         // judge the equivalence of every file pairs, files are list in this.files
         final int testcasesNum = 10;
         InputGenerator inputGenerator = new InputGenerator(this.inFormat);
         String[] testcases = new String[testcasesNum];
         for(int i=0; i<testcasesNum; i++) {
             testcases[i] = inputGenerator.genInput();
+        }
+        Execute[] executables = new Execute[files.length];
+        File outputDir = new File(this.dir.getPath()+"/temp");
+        outputDir.mkdir();
+        for(int i=0; i<files.length; i++) {
+            executables[i] = new Execute(this.files[i], this.dir, outputDir);
         }
     }
 
