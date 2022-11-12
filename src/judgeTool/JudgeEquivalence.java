@@ -18,13 +18,13 @@ public class JudgeEquivalence {
         File[] inFormatList = this.dir.listFiles((File f)-> (f.getName().equalsIgnoreCase(inFormatName)));
 
         if(inFormatList.length > 0) {
-            inFormat = inFormatList[0];
+            this.inFormat = inFormatList[0];
         }
         else {
-            inFormat = null;
+            this.inFormat = null;
         }
 
-        if(files.length > 0) {
+        if(this.files.length > 0) {
             this.equivalence = new UFS(this.files.length);
         } 
         else {
@@ -33,7 +33,8 @@ public class JudgeEquivalence {
     }
 
     public void judge() {
-        // TODO: judge the equivalence of every file pairs, files are list in this.files
+        // judge the equivalence of every file pairs, files are list in this.files
+        InputGenerator inputGenerator = new InputGenerator(this.inFormat);
     }
 
     public UFS getJudgeResult() {
