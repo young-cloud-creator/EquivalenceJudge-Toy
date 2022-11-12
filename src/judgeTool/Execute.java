@@ -33,11 +33,15 @@ public class Execute {
         Runtime.getRuntime().exec("echo \"\" >> "+outputFile.getCanonicalPath());
         try {
             if(p.waitFor() != 0) {
-                Runtime.getRuntime().exec("echo \"Error: \"" +p.exitValue()+ " >> "+outputFile.getCanonicalPath());
+                Runtime.getRuntime().exec("echo \"Nonzero Error\" >> "+outputFile.getCanonicalPath());
             }
         }
         catch(InterruptedException e) {
             Runtime.getRuntime().exec("echo \"InterruptedException\" >> "+outputFile.getCanonicalPath());
         }
+    }
+
+    File getOutputFile() {
+        return this.outputFile;
     }
 }
