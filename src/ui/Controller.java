@@ -80,11 +80,11 @@ public class Controller {
             if(!visited[i]) {
                 visited[i] = true;
                 ArrayList<String> temp = new ArrayList<>();
-                temp.add(files[i].getCanonicalPath());
+                temp.add(files[i].getName());
                 for(int j=i+1; j<files.length; j++) {
                     if(!visited[j] && equivalence.isSameRoot(i, j)) {
                         visited[j] = true;
-                        temp.add(files[j].getCanonicalPath());
+                        temp.add(files[j].getName());
                     }
                 }
                 result.add(temp);
