@@ -85,3 +85,11 @@ input
 ## 其他
 
 这就是一个玩具，不要对它的功能抱有不切实际的幻想🥺
+
+项目的最新版本使用了多线程运行，显著提升了运行速度。单线程版本位于single-thread分支下。多线程版本与单线程版本对比如下：
+
+<img width="1300" alt="单线程运行时间为41s" src="https://user-images.githubusercontent.com/84324349/201519982-c27d0482-7fc1-4283-b6e2-1c0f05311bdc.png">
+
+<img width="1300" alt="多线程运行时间为6s" src="https://user-images.githubusercontent.com/84324349/201519941-f76053c8-1512-4be3-b8ba-482516d65807.png">
+
+可见，单线程版本运行了41s才得到结果，而多线程版本只用了6s。
