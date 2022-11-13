@@ -46,8 +46,10 @@ public class Controller {
     }
 
     private void output2csv(UFS equivalence, File[] files, File subDir) throws IOException {
-        File equalCSV = new File(subDir.getCanonicalPath()+"/"+"equal.csv");
-        File inequalCSV = new File(subDir.getCanonicalPath()+"/"+"inequal.csv");
+        File outputDir = new File(subDir.getCanonicalPath()+"/output/");
+        File equalCSV = new File(outputDir.getCanonicalPath()+"/"+"equal.csv");
+        File inequalCSV = new File(outputDir.getCanonicalPath()+"/"+"inequal.csv");
+        outputDir.mkdir();
         equalCSV.createNewFile();
         inequalCSV.createNewFile();
         FileOutputStream equalFos = new FileOutputStream(equalCSV);
