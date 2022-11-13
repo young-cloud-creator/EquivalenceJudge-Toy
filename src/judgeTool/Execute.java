@@ -2,6 +2,7 @@ package judgeTool;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class Execute {
     
@@ -43,9 +44,16 @@ public class Execute {
             Runtime.getRuntime().exec(new String[]{this.shell, "-c",
                 "echo \"\" >> "+outputFile.getCanonicalPath()});
             try {
-                if(p.waitFor() != 0) {
+                if(p.waitFor(1, TimeUnit.SECONDS)) {
+                    if(p.exitValue() != 0) {
+                        Runtime.getRuntime().exec(new String[]{this.shell, "-c",
+                            "echo \"Nonzero Error\" >> "+outputFile.getCanonicalPath()});
+                    }
+                }
+                else {
+                    p.destroy();
                     Runtime.getRuntime().exec(new String[]{this.shell, "-c",
-                        "echo \"Nonzero Error\" >> "+outputFile.getCanonicalPath()});
+                            "echo \"Timeout\" >> "+outputFile.getCanonicalPath()});
                 }
             }
             catch(InterruptedException e) {
