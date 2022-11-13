@@ -40,9 +40,8 @@ public class Execute {
         }
         else {
             Process p = Runtime.getRuntime().exec(new String[]{this.shell, "-c",
-                "echo \""+testcase+"\" | "+excutableFile.getCanonicalPath()+" >> "+outputFile.getCanonicalPath()});
-            Runtime.getRuntime().exec(new String[]{this.shell, "-c",
-                "echo \"\" >> "+outputFile.getCanonicalPath()});
+                "echo \""+testcase+"\" | "+excutableFile.getCanonicalPath()+" >> "+outputFile.getCanonicalPath()
+                + " && " + "echo \"\" >> "+outputFile.getCanonicalPath()});
             try {
                 if(p.waitFor(1, TimeUnit.SECONDS)) {
                     if(p.exitValue() != 0) {
