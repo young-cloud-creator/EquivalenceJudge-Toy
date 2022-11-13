@@ -52,7 +52,7 @@ public class MainUI {
     void outputResults(String pathName, ArrayList<ArrayList<String> > equivalence) {
         // pathName stores path to files, equivalence[i] stores files equivalence with each other
         // output the result to stdout
-        System.out.println("------result of files in "+pathName+"------");
+        System.out.println("------result of "+pathName+"------");
         System.out.println();
         for(ArrayList<String> files : equivalence) {
             System.out.println("------");
