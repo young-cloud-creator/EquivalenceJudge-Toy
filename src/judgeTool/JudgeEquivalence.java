@@ -73,10 +73,10 @@ public class JudgeEquivalence {
                     continue;
                 }
                 else {
-                    File f1 = new File(outputDir.getCanonicalPath()+
-                                files[i].getName().substring(0, files[i].getName().lastIndexOf(".")));
-                    File f2 = new File(outputDir.getCanonicalPath()+
-                                files[j].getName().substring(0, files[j].getName().lastIndexOf(".")));
+                    File f1 = new File(outputDir.getCanonicalPath()+"/"+
+                                files[i].getName().substring(0, files[i].getName().lastIndexOf("."))+".txt");
+                    File f2 = new File(outputDir.getCanonicalPath()+"/"+
+                                files[j].getName().substring(0, files[j].getName().lastIndexOf("."))+".txt");
                     if(isSameContent(f1, f2)) {
                         equivalence.unionRoot(i, j);
                     }
