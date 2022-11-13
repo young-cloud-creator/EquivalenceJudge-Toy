@@ -3,6 +3,9 @@ package judgeTool;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import dataStructure.UFS;
 
 public class JudgeEquivalence {
@@ -39,20 +42,31 @@ public class JudgeEquivalence {
         final int testcasesNum = 10;
         InputGenerator inputGenerator = new InputGenerator(this.inFormat);
         String[] testcases = new String[testcasesNum];
-        for(int i=0; i<testcasesNum; i++) {
-            testcases[i] = inputGenerator.genInput();
-        }
         Execute[] executables = new Execute[files.length];
         File outputDir = new File(this.dir.getPath()+"/temp");
         outputDir.mkdir();
+        for(int i=0; i<testcasesNum; i++) {
+            testcases[i] = inputGenerator.genInput();
+        }
         for(int i=0; i<files.length; i++) {
             executables[i] = new Execute(this.files[i], this.dir, outputDir);
         }
+
+        ExecutorService pool = Executors.newFixedThreadPool(10);
         for(Execute execute : executables) {
-            for(String testcase : testcases) {
-                execute.exec(testcase);
-            }
+            pool.execute(()->{
+                execute.compile();
+                for(String testcase : testcases) {execute.exec(testcase);}});
         }
+        pool.shutdown();
+        try {
+            pool.awaitTermination(8, TimeUnit.HOURS);
+        }
+        catch (InterruptedException ex) {
+            pool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+
         doJudge(outputDir);
         Runtime.getRuntime().exec("rm -rf "+outputDir.getCanonicalPath());
     }
