@@ -1,6 +1,7 @@
 package ui;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MainUI {
@@ -47,7 +48,7 @@ public class MainUI {
         in.close();
     }
 
-    void outputResults(String pathName, String[][] equivalence) {
+    void outputResults(String pathName, ArrayList<ArrayList<String> > equivalence) {
         // pathName stores path to files, equivalence[i] stores files equivalence with each other
         // TODO: output the result to stdout
     }
