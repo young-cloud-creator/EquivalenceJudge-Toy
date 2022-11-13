@@ -12,7 +12,7 @@ public class UFS {
 
     public int findRoot(int i) {
         if(ufs[i] != i) {
-            ufs[i] = findRoot(i);
+            ufs[i] = findRoot(ufs[i]);
         }
         return ufs[i];
     }
