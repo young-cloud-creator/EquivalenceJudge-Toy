@@ -24,7 +24,7 @@ public class Controller {
         this.subDirs = this.dir.listFiles((File f)->f.isDirectory());
     }
 
-    void doJudge() {
+    void doJudge() throws IOException {
         for(File subDir : subDirs) {
             JudgeEquivalence judge = new JudgeEquivalence(subDir);
             judge.judge();

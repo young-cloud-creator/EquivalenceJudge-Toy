@@ -43,8 +43,8 @@ public class MainUI {
     private void listenInput() throws IOException {
         String targetPath = in.nextLine();
         controller.setDir(targetPath);
-        in.close();
         controller.doJudge();
+        in.close();
     }
 
     void outputResults(String pathName, String[][] equivalence) {
