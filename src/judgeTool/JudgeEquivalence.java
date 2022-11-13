@@ -1,6 +1,7 @@
 package judgeTool;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import dataStructure.UFS;
@@ -48,6 +49,13 @@ public class JudgeEquivalence {
         for(int i=0; i<files.length; i++) {
             executables[i] = new Execute(this.files[i], this.dir, outputDir);
         }
+        for(Execute execute : executables) {
+            for(String testcase : testcases) {
+                execute.exec(testcase);
+            }
+        }
+        doJudge(outputDir);
+        Runtime.getRuntime().exec("rm -rf "+outputDir.getCanonicalPath());
     }
 
     public UFS getJudgeResult() {
@@ -58,6 +66,54 @@ public class JudgeEquivalence {
         return this.files;
     }
 
+    private void doJudge(File outputDir) throws IOException {
+        for(int i=0; i<files.length; i++) {
+            for(int j=i+1; j<files.length; j++) {
+                if(equivalence.isSameRoot(i, j)) {
+                    continue;
+                }
+                else {
+                    File f1 = new File(outputDir.getCanonicalPath()+
+                                files[i].getName().substring(0, files[i].getName().lastIndexOf(".")));
+                    File f2 = new File(outputDir.getCanonicalPath()+
+                                files[j].getName().substring(0, files[j].getName().lastIndexOf(".")));
+                    if(isSameContent(f1, f2)) {
+                        equivalence.unionRoot(i, j);
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean isSameContent(File f1, File f2) {
+        try(FileInputStream f1InStream = new FileInputStream(f1);
+            FileInputStream f2InStream = new FileInputStream(f2);) {
+            int f1Char = 0;
+            int f2Char = 0;
+
+            while (true) {
+                f1Char = f1InStream.read();
+                f2Char = f2InStream.read();
+                if (f1Char != -1 && f2Char != -1) {
+                    if (f1Char != f2Char) {
+                        return false;
+                    }
+                    else {
+                        continue;
+                    }
+               } 
+                else {
+                    break;
+                }
+            }
+        }
+        catch(Exception e) {
+            return false;
+        } 
+
+        return true;
+    }
+    
     private String getFileExtension(File f) {
         String extension = new String();
         int idx = f.getName().lastIndexOf(".");
