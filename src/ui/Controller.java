@@ -30,7 +30,7 @@ public class Controller {
         this.subDirs = this.dir.listFiles((File f)->f.isDirectory());
     }
 
-    void doJudge() throws IOException {
+    void doJudge() {
         ExecutorService pool = Executors.newCachedThreadPool();
         for(File subDir : subDirs) {
             pool.execute(()->doThread(subDir));
