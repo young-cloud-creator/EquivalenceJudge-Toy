@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 import dataStructure.UFS;
 import judgeTool.JudgeEquivalence;
@@ -41,6 +42,7 @@ public class Controller {
         // process the UFS and write file pairs to .csv files
         // TODO: convert UFS to String[][] so that it can be output by MainUI
         output2csv(equivalence, files, subDir);
+        output2ui(equivalence, files, subDir);
     }
 
     private void output2csv(UFS equivalence, File[] files, File subDir) throws IOException {
@@ -68,4 +70,27 @@ public class Controller {
         inequalWriter.close();
     }
 
+    private void output2ui(UFS equivalence, File[] files, File subDir) throws IOException {
+        ArrayList<ArrayList<String> > result = new ArrayList<>();
+        boolean[] visited = new boolean[files.length];
+        for(int i=0; i<visited.length; i++) {
+            visited[i] = false;
+        }
+        for(int i=0; i<files.length; i++) {
+            if(!visited[i]) {
+                visited[i] = true;
+                ArrayList<String> temp = new ArrayList<>();
+                temp.add(files[i].getCanonicalPath());
+                for(int j=i+1; j<files.length; j++) {
+                    if(!visited[j] && equivalence.isSameRoot(i, j)) {
+                        visited[j] = true;
+                        temp.add(files[j].getCanonicalPath());
+                    }
+                }
+                result.add(temp);
+            }
+        }
+
+        ui.outputResults(subDir.getCanonicalPath(), result);
+    }
 }
