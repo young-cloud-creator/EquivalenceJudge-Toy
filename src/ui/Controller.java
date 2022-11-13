@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import dataStructure.UFS;
 import judgeTool.JudgeEquivalence;
@@ -29,14 +31,26 @@ public class Controller {
     }
 
     void doJudge() throws IOException {
+        ExecutorService pool = Executors.newCachedThreadPool();
         for(File subDir : subDirs) {
+            pool.execute(()->doThread(subDir));
+        }
+        pool.shutdown();
+    }
+
+    private void doThread(File subDir) {
+        try {
             JudgeEquivalence judge = new JudgeEquivalence(subDir);
             judge.judge();
             UFS resultUFS = judge.getJudgeResult();
             File[] resultFiles = judge.getFiles();
             processResult(resultUFS, resultFiles, subDir);
         }
-    }
+        catch(IOException e) {
+            System.out.println(e.getMessage());
+            System.exit(-1);
+        }
+    } 
 
     private void processResult(UFS equivalence, File[] files, File subDir) throws IOException {
         // process the UFS and write file pairs to .csv files
@@ -93,6 +107,8 @@ public class Controller {
             }
         }
 
-        ui.outputResults(subDir.getCanonicalPath(), result);
+        synchronized(this) {
+            ui.outputResults(subDir.getCanonicalPath(), result);
+        }
     }
 }
