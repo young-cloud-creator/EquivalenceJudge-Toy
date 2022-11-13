@@ -43,6 +43,7 @@ public class MainUI {
 
     private void listenInput() throws IOException {
         String targetPath = in.nextLine();
+        System.out.println("Working, please wait patiently...");
         controller.setDir(targetPath);
         controller.doJudge();
         in.close();
@@ -50,6 +51,17 @@ public class MainUI {
 
     void outputResults(String pathName, ArrayList<ArrayList<String> > equivalence) {
         // pathName stores path to files, equivalence[i] stores files equivalence with each other
-        // TODO: output the result to stdout
+        // output the result to stdout
+        System.out.println("------result of files in "+pathName+"------");
+        System.out.println();
+        for(ArrayList<String> files : equivalence) {
+            System.out.println("------");
+            for(String f : files) {
+                System.out.println(f);
+            }
+            System.out.println("------");
+        }
+        System.out.println();
+        System.out.println("------------------------------");
     }
 }
