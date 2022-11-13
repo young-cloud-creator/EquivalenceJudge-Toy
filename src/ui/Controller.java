@@ -40,7 +40,7 @@ public class Controller {
 
     private void processResult(UFS equivalence, File[] files, File subDir) throws IOException {
         // process the UFS and write file pairs to .csv files
-        // TODO: convert UFS to String[][] so that it can be output by MainUI
+        // convert UFS to ArrayList so that it can be output by MainUI
         output2csv(equivalence, files, subDir);
         output2ui(equivalence, files, subDir);
     }
