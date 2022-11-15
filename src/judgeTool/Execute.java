@@ -87,8 +87,4 @@ public class Execute {
             System.exit(-1);
         }
     }
-
-    File getOutputFile() {
-        return this.outputFile;
-    }
 }
