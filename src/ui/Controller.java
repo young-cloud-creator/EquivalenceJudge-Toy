@@ -7,7 +7,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.util.concurrent.TimeUnit;
 import dataStructure.UFS;
 import judgeTool.JudgeEquivalence;
 
@@ -16,6 +16,8 @@ public class Controller {
     private final MainUI ui;
     private File dir;
     private File[] subDirs;
+    private OutputStreamWriter generalEqualWriter;
+    private OutputStreamWriter generalInequalWriter;
 
     Controller(MainUI ui) {
         this.ui = ui;
@@ -30,12 +32,31 @@ public class Controller {
         this.subDirs = this.dir.listFiles((File f)->f.isDirectory());
     }
 
-    void doJudge() {
+    void doJudge() throws IOException {
         ExecutorService pool = Executors.newCachedThreadPool();
+        File outputDir = new File(dir.getCanonicalPath()+"/output");
+        File outputEqual = new File(outputDir.getCanonicalPath()+"/equal.csv");
+        File outputInequal = new File(outputDir.getCanonicalPath()+"/inequal.csv");
+        outputDir.mkdir();
+        outputEqual.createNewFile();
+        outputInequal.createNewFile();
+        FileOutputStream generalEqualFos = new FileOutputStream(outputEqual);
+        FileOutputStream generalInequalFos = new FileOutputStream(outputInequal);
+        this.generalEqualWriter = new OutputStreamWriter(generalEqualFos);
+        this.generalInequalWriter = new OutputStreamWriter(generalInequalFos);
         for(File subDir : subDirs) {
             pool.execute(()->doThread(subDir));
         }
         pool.shutdown();
+        try {
+            pool.awaitTermination(8, TimeUnit.HOURS);
+        }
+        catch (InterruptedException ex) {
+            pool.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+        this.generalEqualWriter.close();
+        this.generalInequalWriter.close();
     }
 
     private void doThread(File subDir) {
@@ -60,30 +81,32 @@ public class Controller {
     }
 
     private void output2csv(UFS equivalence, File[] files, File subDir) throws IOException {
-        File outputDir = new File(subDir.getCanonicalPath()+"/output/");
-        File equalCSV = new File(outputDir.getCanonicalPath()+"/"+"equal.csv");
-        File inequalCSV = new File(outputDir.getCanonicalPath()+"/"+"inequal.csv");
-        outputDir.mkdir();
-        equalCSV.createNewFile();
-        inequalCSV.createNewFile();
-        FileOutputStream equalFos = new FileOutputStream(equalCSV);
-        FileOutputStream inequalFos = new FileOutputStream(inequalCSV);
-        OutputStreamWriter equalWriter = new OutputStreamWriter(equalFos);
-        OutputStreamWriter inequalWriter = new OutputStreamWriter(inequalFos);
+        //File outputDir = new File(subDir.getCanonicalPath()+"/output/");
+        //File equalCSV = new File(outputDir.getCanonicalPath()+"/"+"equal.csv");
+        //File inequalCSV = new File(outputDir.getCanonicalPath()+"/"+"inequal.csv");
+        //outputDir.mkdir();
+        //equalCSV.createNewFile();
+        //inequalCSV.createNewFile();
+        //FileOutputStream equalFos = new FileOutputStream(equalCSV);
+        //FileOutputStream inequalFos = new FileOutputStream(inequalCSV);
+        //OutputStreamWriter equalWriter = new OutputStreamWriter(equalFos);
+        //OutputStreamWriter inequalWriter = new OutputStreamWriter(inequalFos);
 
         for(int i=0; i<files.length; i++) {
             for(int j=i+1; j<files.length; j++) {
                 if(equivalence.isSameRoot(i, j)) {
-                    equalWriter.write(files[i].getCanonicalPath()+","+files[j].getCanonicalPath()+"\n");
+                    //equalWriter.write(files[i].getCanonicalPath()+","+files[j].getCanonicalPath()+"\n");
+                    this.generalEqualWriter.write(files[i].getCanonicalPath()+","+files[j].getCanonicalPath()+"\n");
                 }
                 else {
-                    inequalWriter.write(files[i].getCanonicalPath()+","+files[j].getCanonicalPath()+"\n");
+                    //inequalWriter.write(files[i].getCanonicalPath()+","+files[j].getCanonicalPath()+"\n");
+                    this.generalInequalWriter.write(files[i].getCanonicalPath()+","+files[j].getCanonicalPath()+"\n");
                 }
             }
         }
 
-        equalWriter.close();
-        inequalWriter.close();
+        //equalWriter.close();
+        //inequalWriter.close();
     }
 
     private void output2ui(UFS equivalence, File[] files, File subDir) throws IOException {
