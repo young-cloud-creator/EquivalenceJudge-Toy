@@ -44,6 +44,8 @@ public class Controller {
         FileOutputStream generalInequalFos = new FileOutputStream(outputInequal);
         this.generalEqualWriter = new OutputStreamWriter(generalEqualFos);
         this.generalInequalWriter = new OutputStreamWriter(generalInequalFos);
+        this.generalEqualWriter.write("file1,file2\n");
+        this.generalInequalWriter.write("file1,file2\n");
         for(File subDir : subDirs) {
             pool.execute(()->doThread(subDir));
         }
